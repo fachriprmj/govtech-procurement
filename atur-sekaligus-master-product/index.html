@@ -722,34 +722,7 @@ function renderCol1(){
     const div = document.createElement('div');
     div.className = 'cat-item' + (state.activeL1===k ? ' active':'');
     div.innerHTML = `<span>${k}</span><svg viewBox="0 0 24 24" fill="none"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-    div.onclick = ()=>{ state.activeL1 = k; state.activeL2=null; renderCol1(); renderCol2(); renderCol3(); };
-    col1.appendChild(div);
-  });
-}
-function renderCol2(){
-  const col2 = document.getElementById('col2');
-  col2.innerHTML = '';
-  if(!state.activeL1){ col2.innerHTML = '<div class="empty-col">Pilih kategori level 1 terlebih dahulu</div>'; return; }
-  const children = categoryTree[state.activeL1];
-  Object.keys(children).forEach(k=>{
-    const div = document.createElement('div');
-    div.className = 'cat-item' + (state.activeL2===k ? ' active':'');
-    div.innerHTML = `<span>${k}</span><svg viewBox="0 0 24 24" fill="none"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-    div.onclick = ()=>{ state.activeL2 = k; renderCol2(); renderCol3(); };
-    col2.appendChild(div);
-  });
-}
-function renderCol3(){
-  const col3 = document.getElementById('col3');
-  col3.innerHTML = '';
-  if(!state.activeL2){ col3.innerHTML = '<div class="empty-col">Pilih kategori level 2 terlebih dahulu</div>'; return; }
-  const leaves = categoryTree[state.activeL1][state.activeL2];
-  leaves.forEach(leaf=>{
-    const path = `${state.activeL1} > ${state.activeL2} > ${leaf}`;
-    const selected = state.selectedLeaves.has(path);
-    const div = document.createElement('div');
-    div.className = 'cat-item' + (selected ? ' leaf-selected':'');
-    div.innerHTML = `<span>${leaf}</span><div class="leaf-check">${selected?'<svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17L4 12" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>`;
+        div.innerHTML = `<span>${leaf}</span><div class="leaf-check">${selected?'<svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17L4 12" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>`;
     div.onclick = ()=> toggleLeaf(path);
     col3.appendChild(div);
   });
@@ -796,7 +769,7 @@ function goToUploadTab(){
 function simulateFileSelect(){
   document.getElementById('dropzone').style.display = 'none';
   document.getElementById('upload-progress').style.display = 'block';
-  document.getElementById('result-card').classList.remove('show');
+ 
   let pct = 0;
   const fill = document.getElementById('progress-fill');
   const status = document.getElementById('progress-status');
@@ -816,8 +789,7 @@ function simulateFileSelect(){
 }
 function finishValidation(){
   document.getElementById('progress-status').textContent = 'Validasi selesai';
-  document.getElementById('result-card').classList.add('show');
-  document.getElementById('result-card').scrollIntoView({behavior:'smooth', block:'center'});
+  
 
   const now = new Date();
   const tanggal = "14 Juli 2026, " + now.getHours().toString().padStart(2,'0') + ":" + now.getMinutes().toString().padStart(2,'0') + (now.getHours()>=12?" PM":" AM");
@@ -884,7 +856,7 @@ function openRiwayatModal(idx){
   document.getElementById('modal-title').textContent = r.file;
   document.getElementById('modal-desc').textContent = `Detail respon proses "${r.tipe}" — status: ${r.status}.`;
   const iconWrap = document.getElementById('modal-icon');
-  iconWrap.className = 'modal-icon' + (r.status==='Sebagian Berhasil' ? ' warn':'');
+  iconWrap.className = 'modal-icon' + (r.status==='Selesai' ? ' warn':'');
   const detailWrap = document.getElementById('modal-detail');
   detailWrap.innerHTML = r.detail.map(d=>`<div class="mrow"><span>${d.label}</span><strong>${d.val}</strong></div>`).join('');
   document.getElementById('modal-overlay').classList.add('show');
